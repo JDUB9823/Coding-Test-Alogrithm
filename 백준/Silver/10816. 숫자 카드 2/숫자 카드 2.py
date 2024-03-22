@@ -1,20 +1,29 @@
 import sys
+input = sys.stdin.readline
 
-N = int(sys.stdin.readline())
-hand = list(map(int, sys.stdin.readline().split()))
-M = int(sys.stdin.readline())
-cards = list(map(int, sys.stdin.readline().split()))
+n = int(input())
+A = sorted(list(map(int, input().split())))
+m = int(input())
+B = list(map(int, input().split()))
+hand = {}
 
-#손에 든 카드를 {카드: 카드 count}로 변환
-handDict = {}
-for card in hand:
-    if card in handDict:
-        handDict[card] += 1
+for card in A:
+    if card in hand:
+        hand[card] += 1
     else:
-        handDict[card] = 1
+        hand[card] = 1
 
-for card in cards:
-    if card in handDict:
-        print(handDict[card], end=" ")
+for card in B:
+    left, right = 0, n-1
+
+    while left <= right:
+        mid = (left + right) // 2
+        if card == A[mid]:
+            print(hand.get(card), end = " ")
+            break
+        elif card <= A[mid]:
+            right = mid - 1
+        else:
+            left = mid + 1
     else:
-        print(0, end=" ")
+        print(0, end = " ")
