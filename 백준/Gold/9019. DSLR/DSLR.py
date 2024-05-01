@@ -25,15 +25,13 @@ def BFS(start, target):
             queue.append([sNum, cmd + "S"])
 
         #L command
-        lStr = str(num).zfill(4)
-        lNum = int(lStr[1:] + lStr[0])
+        lNum = num//1000 + (num % 1000) * 10
         if not visited[lNum]:
             visited[lNum] = True
             queue.append([lNum, cmd + "L"])
 
         #R command
-        rStr = str(num).zfill(4)
-        rNum = int(rStr[-1] + rStr[:3])
+        rNum = num//10 + (num%10) * 1000
         if not visited[rNum]:
             visited[rNum] = True
             queue.append([rNum, cmd + "R"])
