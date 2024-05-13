@@ -1,39 +1,40 @@
-def find_parent(parent, x):
-    if parent[x] != x:
-        parent[x] = find_parent(parent, parent[x])
-    return parent[x]
+import sys
+input = sys.stdin.readline
 
-def union_parent(parent, a, b):
-    a = find_parent(parent, a)
-    b = find_parent(parent, b)
+def find(city):
+    if city != parents[city]:
+        parents[city] = find(parents[city])
+    return parents[city]
 
-    if a < b:
-        parent[b] = a
+def union(a, b):
+    A = find(a)
+    B = find(b)
+
+    #값이 더 작은 노드가 부모로
+    if A > B:
+        parents[A] = B
     else:
-        parent[a] = b
+        parents[B] = A
 
+N, M = int(input()), int(input())
+parents = [i for i in range(N+1)]
 
-n = int(input())
-m = int(input())
-
-parent = [0] * (n+1)
-for i in range(1, n+1):
-    parent[i] = i
-
-cities = []
-for i in range(n):
-    cities.append(list(map(int, input().split())))
-    for j in range(n):
-        if cities[i][j] == 1:
-            union_parent(parent, i+1, j+1)
-
+links = []
+for i in range(N):
+    links.append(list(map(int, input().split())))
+    for j in range(N):
+        if links[i][j] == 1:
+            union(i+1, j+1)
 
 plan = list(map(int, input().split()))
-plan_set = set(plan) # 중복 제거
+root = find(plan[0])
+#중복된 계획 제거
+plan = list(set(plan))[1:]
+flag = True
 
-check = find_parent(parent, plan[0])
-for i in plan_set:
-    if find_parent(parent, i) != check:
-        print("NO")
-        exit(0)
-print("YES")
+for city in plan:
+    if root != find(city):
+        flag = False
+        break
+
+print("YES" if flag else "NO")
